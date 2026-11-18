@@ -1,0 +1,12 @@
+#!/bin/sh
+echo "🚀 Running pre-push checks..."
+
+if command -v gitleaks >/dev/null 2>&1; then
+  echo "🔒 Checking for secrets..."
+  gitleaks detect --verbose --no-git
+else
+  echo "ℹ️  gitleaks not found, skipping security check"
+fi
+
+echo "✅ Pre-push checks completed!"
+

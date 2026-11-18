@@ -1,0 +1,12 @@
+{
+  "apps/frontend/**/*.{js,ts,jsx,tsx,vue}": [
+    "pnpm lint:js",
+    "prettier --write"
+  ],
+  "**/*.{json,md,yml,yaml}": ["prettier --write"],
+  "apps/frontend/**/*.{css,scss,sass,vue}": [
+    "pnpm lint:css",
+    "prettier --write"
+  ],
+  "**/*": ["editorconfig-checker"]
+}

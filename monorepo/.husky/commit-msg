@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if command -v commitlint >/dev/null 2>&1; then
+  echo "📝 Validating commit message..."
+  commitlint --edit ${1}
+else
+  echo "⚠️  commitlint not found. Run 'npm install' first."
+  exit 0
+fi
+

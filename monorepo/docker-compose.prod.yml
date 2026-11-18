@@ -1,0 +1,97 @@
+services:
+  traefik:
+    image: traefik:v3.5
+    container_name: traefik
+    restart: unless-stopped
+
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8080:8080'
+
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - 'letsencrypt_data:/letsencrypt'
+    networks:
+      - web
+    command:
+      # - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.websecure.address=:443'
+      - '--certificatesresolvers.letsencrypt.acme.tlschallenge=true'
+      - '--certificatesresolvers.letsencrypt.acme.email=you@example.com'
+      - '--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json'
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes: ['postgres_data:/var/lib/postgresql/data']
+    env_file: ./apps/db/.env
+    expose: ['5432']
+    networks: [internal]
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./apps/backend/Dockerfile
+    container_name: backend
+    env_file: ./apps/backend/.env
+    networks: [web, internal]
+    restart: unless-stopped
+    depends_on:
+      postgres: { condition: service_healthy }
+
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.backend.rule=Host(`api.itvacna.goraworks.com`)'
+      - 'traefik.http.services.backend.loadbalancer.server.port=5000'
+      - 'traefik.docker.network=web'
+      - 'traefik.http.routers.backend.entrypoints=web'
+      - 'traefik.http.routers.backend.middlewares=redirect-to-https@docker'
+      - 'traefik.http.routers.backend-secure.rule=Host(`api.itvacna.goraworks.com`)'
+      - 'traefik.http.routers.backend-secure.entrypoints=websecure'
+      - 'traefik.http.routers.backend-secure.service=backend'
+      - 'traefik.http.routers.backend-secure.tls.certresolver=letsencrypt'
+      - 'traefik.http.routers.backend-secure.tls=true'
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile
+    container_name: frontend
+    restart: unless-stopped
+    env_file: ./apps/backend/.env
+    networks: [web]
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.frontend.rule=Host(`itvacna.goraworks.com`)'
+      - 'traefik.http.routers.frontend.entrypoints=web'
+      - 'traefik.http.services.frontend.loadbalancer.server.port=80'
+      - 'traefik.docker.network=web'
+      - 'traefik.http.routers.frontend.middlewares=redirect-to-https@docker'
+      - 'traefik.http.routers.frontend-secure.rule=Host(`itvacna.goraworks.com`)'
+      - 'traefik.http.routers.frontend-secure.entrypoints=websecure'
+      - 'traefik.http.routers.frontend-secure.service=frontend'
+      - 'traefik.http.routers.frontend-secure.tls.certresolver=letsencrypt'
+      - 'traefik.http.routers.frontend-secure.tls=true'
+
+networks:
+  web:
+    external: true
+  internal:
+    internal: true
+
+volumes:
+  letsencrypt_data:
+    driver: local
+  postgres_data:
+    external: true

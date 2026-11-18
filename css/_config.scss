@@ -1,0 +1,40 @@
+$color-light: #f2f9ff;
+$color-light-blue: #007fff;
+$color-blue: #002040;
+$color-white: #fff;
+
+$unit: 5px;
+
+$boder-radius-normal: 10px;
+$boder-radius-medium: 20px;
+$boder-radius-large: 25px;
+$boder-radius-extra-large: 30px;
+$boder-radius-extra-extra-large: 50px;
+
+$z-index-hidden: -1;
+$z-index-base: 1;
+$z-index-overlay: 2;
+$z-index-modal: 3;
+$z-index-dropdown: 4;
+$z-index-tooltip: 5;
+$z-index-topmost: 9999;
+
+$font-small: 14px;
+$font-normal: 16px;
+$font-medium: 18px;
+$font-large: 24px;
+$font-extra-large: 36px;
+$font-extra-extra-large: 44px;
+
+$width-container: 1300px;
+
+$brakepoint-mobile: 480px;
+$brakepoint-tablet: 768px;
+$brakepoint-laptop: 920px;
+$brakepoint-container: 1300px;
+
+@mixin flex($jc: flex-start, $ai: flex-start) {
+  display: flex;
+  justify-content: $jc;
+  align-items: $ai;
+}

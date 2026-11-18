@@ -1,0 +1,97 @@
+diff --git a/components/list/controllers.js b/components/list/controllers.js
+index 385d159..9c789c5 100644
+--- a/components/list/controllers.js
++++ b/components/list/controllers.js
+@@ -61,6 +61,28 @@ class Controllers {
+       next(error)
+     }
+   }
++
++  async addTool(req, res, next) {
++    try {
++      const { name, category } = req.body
++      checkParameters('addTool', { name, category })
++      await services.addTool(name, category)
++      res.json('Успех')
++    } catch (error) {
++      next(error)
++    }
++  }
++
++  async addCategory(req, res, next) {
++    try {
++      const { name } = req.body
++      checkParameters('addCategory', { name })
++      await services.addCategory(name)
++      res.json('Успех')
++    } catch (error) {
++      next(error)
++    }
++  }
+ }
+ 
+ export default new Controllers()
+diff --git a/components/list/routes.js b/components/list/routes.js
+index 1f8da8b..49e0b0c 100644
+--- a/components/list/routes.js
++++ b/components/list/routes.js
+@@ -10,5 +10,7 @@ router.get('/getCategories', controller.getCategories)
+ router.get('/getJobBoardsRegions', controller.getJobBoardsRegions)
+ router.get('/getCountOfCurrentItem', controller.getCountOfCurrentItem)
+ router.get('/getOneCountForAllTools', controller.getOneCountForAllTools)
++router.post('/addTool', controller.addTool)
++router.post('/addCategory', controller.addCategory)
+ 
+ export default router
+diff --git a/components/list/services.js b/components/list/services.js
+index e04395b..847a1c7 100644
+--- a/components/list/services.js
++++ b/components/list/services.js
+@@ -105,6 +105,16 @@ class Services {
+     return hashTools
+   }
+ 
++  async addTool(name, category) {
++    const toolId = await queries.addTool(name)
++    await queries.addCategoryTool(category, toolId[0].id_tool)
++  }
++
++  async addCategory(name) {
++    console.log(name)
++    await queries.addCategory(name)
++  }
++
+   // async getHashCounts(region, jobBoard, date) {
+   //   const tools = await queries.getOneCountOfAllTechnology(date)
+   //   const hashTools = {}
+diff --git a/components/list/sql.js b/components/list/sql.js
+index 7cef576..8590a62 100644
+--- a/components/list/sql.js
++++ b/components/list/sql.js
+@@ -122,6 +122,26 @@ class Queries {
+   getSearchQueries() {
+     return pQuery(`SELECT * FROM search_queries;`)
+   }
++
++  //
++
++  addCategoryTool(name, id) {
++    return pQuery(
++      `INSERT INTO categories_tools(id_category, id_tool) VALUES($1, $2);`,
++      [name, id]
++    )
++  }
++
++  addCategory(name) {
++    return pQuery(`INSERT INTO categories(name_category) VALUES($1);`, [name])
++  }
++
++  addTool(name) {
++    return pQuery(
++      `INSERT INTO tools(name_tool) VALUES($1) RETURNING id_tool;`,
++      [name]
++    )
++  }
+ }
+ 
+ export default new Queries()

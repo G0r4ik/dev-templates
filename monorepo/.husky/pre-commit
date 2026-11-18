@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if command -v lint-staged >/dev/null 2>&1; then
+  echo "🔍 Running lint-staged..."
+  lint-staged
+else
+  echo "⚠️  lint-staged not found. Run 'npm install' first."
+  exit 1
+fi

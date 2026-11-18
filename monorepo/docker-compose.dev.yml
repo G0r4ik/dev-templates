@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: it-vacancy-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-it_vacancy_trend}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./apps/db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Uncomment for full development setup
+  # backend:
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/backend/Dockerfile
+  #     target: development
+  #   container_name: it-vacancy-backend
+  #   ports:
+  #     - "${BACKEND_PORT:-3000}:3000"
+  #   volumes:
+  #     - ./apps/backend:/app
+  #     - /app/node_modules
+  #   environment:
+  #     NODE_ENV: development
+  #     POSTGRES_HOST: postgres
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   env_file:
+  #     - ./apps/backend/.env
+
+volumes:
+  postgres_data:
+    driver: local

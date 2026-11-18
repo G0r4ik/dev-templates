@@ -1,0 +1,94 @@
+:root {
+  --color-picton-blue-base: #4ba5e4;
+  --color-soft-orange-base: #f6b87e;
+  --color-mine-shaft-base: #242424;
+  --color-chartreuse-base: #9bff00;
+  --color-light-gray-base: #e3e3e3;
+  --color-turquoise-base: #5cdba6;
+  --color-light-red-base: tomato;
+  --color-cod-gray-base: #111;
+  --color-white-base: #fff;
+  --color-gray-base: gray;
+  /* COLOR */
+  --color-primary: var(--color-picton-blue-base);
+  --color-background: var(--color-cod-gray-base);
+  --color-border: var(--color-mine-shaft-base);
+  --color-link: var(--color-picton-blue-base);
+  --color-danger: var(--color-light-red-base);
+  --color-star: var(--color-soft-orange-base);
+  --color-skeleton-bg: rgb(0 0 0 / 12%);
+  --color-text: var(--color-white-base);
+  --color-modal-bg: rgb(0 0 0 / 70%);
+  --color-error-popup: #eb5b5b;
+  /* UNIT */
+  --unit: 5px;
+  /* z-index */
+  --z-index-hidden: -1;
+  --z-index-base: 1;
+  --z-index-overlay: 2;
+  --z-index-modal: 3;
+  --z-index-dropdown: 4;
+  --z-index-tooltip: 5;
+  --z-index-topmost: 9999;
+  /* FONT-SIZE */
+  --text-extra-small: 14px;
+  --text-small: 16px;
+  --text-middle: 18px;
+  --text-large: 24px;
+  --text-extra-large: 30px;
+  --text-extra-extra-large: 50px;
+  /* ICON */
+  --icon-size-small: 18px;
+  --icon-size: 24px;
+  --icon-size-large: 30px;
+  /* BORDER-RADIUS */
+  --radius: 5px;
+  --border-radius-middle: calc(var(--radius) * 2);
+  --border-radius-large: calc(var(--radius) * 3);
+  /* Border */
+  --border-width-extra-small: 1px;
+  --border-width-small: 2px;
+  --border-width: 3px;
+  /* Width */
+  --width-popup-error-bg: 50px;
+  --width-count-tools: 56px;
+  --width-change-theme: 70px;
+  --width-header-logo-mobile: 115px;
+  --width-select-date: 150px;
+  --width-popup-error: 300px;
+  --width-pagination-5: 306px;
+  --max-width-title: 300px;
+  --width-auth: 400px;
+  /* Height */
+  --height-table-item: 25px;
+  --height-count-tools: 27px;
+  --height-logo-mobile: 30px;
+  --height-pagination: 36px;
+  --height-table-tr: 42px;
+  --height-header: 70px;
+  --height-menu-list: 100px;
+  --max-height-popup-error-text: 100px;
+  --height-filters: 120px;
+  --height-compare-tools: 500px;
+  --max-height-chart: 1000px;
+  --height-not-found: 50vh;
+  --height-chart: 60vh;
+  /* Transition */
+  --transition-extra-small: 0.1s;
+  --transition-small: 0.3s;
+  --transition-main: 0.5s;
+  --transition-skeleton: 1.5s;
+}
+:root.light-theme {
+  --color-background: var(--color-white-base);
+  --color-text: var(--color-cod-gray-base);
+  --color-border: var(--color-light-gray-base);
+  --color-bg-checkbox: #e9e9eb;
+  --color-transparent-bg: rgba(0 0 0 / 0.5%);
+}
+:root.dark-theme {
+  --color-background: var(--color-cod-gray-base);
+  --color-text: var(--color-white-base);
+  --color-bg-checkbox: #262629;
+  --color-transparent-bg: rgba(255 255 255 / 0.5%);
+}

@@ -1,0 +1,15 @@
+.git
+dist
+.git
+*.md
+.env*
+*.log
+.turbo
+.vscode
+.github
+coverage
+README.md
+node_modules
+pnpm-debug.log
+.gitleaks.toml
+apps/*/node_modules

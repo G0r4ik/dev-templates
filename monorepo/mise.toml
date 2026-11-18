@@ -1,0 +1,5 @@
+[tools]
+node = "22"
+python = '3.10'
+atlas = "0.37"
+pnpm = "10"

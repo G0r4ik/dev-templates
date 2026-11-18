@@ -1,0 +1,30 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "ui": "stream",
+  "globalDependencies": [
+    "eslint.config.js",
+    ".stylelintrc*",
+    ".prettierrc",
+    ".lintstagedrc.json"
+  ],
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "build/**", "public/dist/**"]
+    },
+    "lint": {
+      "cache": true,
+      "inputs": ["**/*.js", "**/*.vue", "**/*.css"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "cache": true
+    },
+    "secrets:pull": { "cache": false }
+  }
+}

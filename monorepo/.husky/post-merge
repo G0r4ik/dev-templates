@@ -1,0 +1,10 @@
+#!/bin/sh
+
+echo "🔄 Post-merge: Checking for dependency changes..."
+
+if git diff-tree -r --name-only --no-commit-id HEAD@{1} HEAD | grep -E "(package\.json|pnpm-lock\.yaml)" > /dev/null; then
+  echo "📦 Dependencies changed, running pnpm install..."
+  pnpm install
+else
+  echo "✅ No dependency changes detected"
+fi
